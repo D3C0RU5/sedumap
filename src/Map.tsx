@@ -1,4 +1,10 @@
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  ZoomControl,
+} from "react-leaflet";
 import L from "leaflet";
 import { pontos, type Ponto } from "./pontos";
 import { useMemo, useState } from "react";
@@ -58,17 +64,24 @@ export const MapComponent = () => {
   };
 
   return (
-    <div style={{ height: "100vh", width: "100%" }}>
+    <div style={{ height: "100vh", width: "100%", position: "relative" }}>
       {/* BUSCA */}
       <div
         style={{
           position: "absolute",
+          top: 10,
+          left: 10,
+          right: 10,
           zIndex: 1000,
-          padding: 10,
-          width: 320,
         }}
       >
-        <div style={{ display: "flex", gap: 6 }}>
+        <div
+          style={{
+            display: "flex",
+            gap: 6,
+            width: "100%",
+          }}
+        >
           <input
             type="text"
             placeholder="Buscar escola..."
@@ -79,17 +92,23 @@ export const MapComponent = () => {
             }}
             style={{
               flex: 1,
-              padding: 6,
+              padding: 10,
               border: "1px solid #ccc",
-              borderRadius: 4,
+              borderRadius: 6,
+              fontSize: 16,
+              boxSizing: "border-box",
+              background: "white",
             }}
           />
 
           <button
             onClick={limparBusca}
             style={{
-              padding: "6px 10px",
+              padding: "10px 14px",
               cursor: "pointer",
+              borderRadius: 6,
+              border: "1px solid #ccc",
+              background: "white",
             }}
           >
             ✕
@@ -101,17 +120,19 @@ export const MapComponent = () => {
             style={{
               background: "white",
               border: "1px solid #ccc",
-              borderRadius: 4,
+              borderRadius: 6,
               marginTop: 4,
-              maxHeight: 200,
+              maxHeight: 220,
               overflowY: "auto",
+              width: "100%",
+              boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
             }}
           >
             {sugestoes.map((p) => (
               <div
                 key={p.nome}
                 style={{
-                  padding: 8,
+                  padding: 10,
                   cursor: "pointer",
                   borderBottom: "1px solid #eee",
                 }}
@@ -128,7 +149,14 @@ export const MapComponent = () => {
       </div>
 
       {/* MAPA */}
-      <MapContainer center={mapCenter} zoom={13} style={{ height: "100%" }}>
+      <MapContainer
+        center={mapCenter}
+        zoom={13}
+        zoomControl={false}
+        style={{ height: "100%", width: "100%" }}
+      >
+        <ZoomControl position="bottomright" />
+
         <TileLayer
           attribution="© OpenStreetMap"
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
